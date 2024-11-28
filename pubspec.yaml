@@ -1,0 +1,90 @@
+name: getxbase
+description: A new Flutter project.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.17.6 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  image_picker: ^0.8.4+4  
+  # IOS Material Icons #
+  cupertino_icons: ^1.0.2
+  firebase_core: ^3.8.0
+  firebase_auth: ^5.3.3
+  firebase_auth_web: ^5.8.13
+  cloud_firestore: ^5.5.0
+  firebase_storage: ^12.3.6
+  fluttertoast: ^8.1.2
+  # cached_network_image: ^3.4.1
+  get: ^4.6.6
+
+
+  # Offline Stoarage #
+  get_storage: ^2.0.3
+  carousel_slider: ^4.0.0 
+  # State Management Aproach #
+  # get: ^4.3.8
+
+
+  # IOS Material Icons #
+  http: ^0.13.4
+
+  # Manages Loader #
+  flutter_easyloading: ^3.0.3
+
+  # Customizing Fonts #
+  google_fonts: ^2.1.0
+
+  # Manage Responsiveness #
+  sizer: ^2.0.15
+
+  # Checking Network Connection #
+  connectivity_plus: ^2.3.6+1
+  provider: ^6.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+
+
+# The following section is specific to Flutter packages.
+flutter:
+  uses-material-design: true
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Regular.ttf
+        - asset: assets/fonts/Inter-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Inter-SemiBold.ttf
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/images/
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages
