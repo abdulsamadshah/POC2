@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:getxbase/Modules/authentication/onborading/splashscreen.dart';
+import 'package:getxbase/Modules/homescreen/category.dart';
 import 'package:getxbase/Modules/homescreen/homescreens.dart';
 import 'package:getxbase/Routes/app_routes.dart';
 
@@ -9,7 +10,7 @@ class AppPages {
   ///
   /// Define Initial Screen Route
   ///
-  static const INITIAL = AppRoutes.splashScreen;
+  static const INITIAL = AppRoutes.Categoryscreen;
 
   ///
   /// Static list of routes with Page name, Route name & Transition
@@ -22,6 +23,10 @@ class AppPages {
     GetPage(
         name: AppRoutes.Homescreen,
         page: () => const Homescreen(),
+        transition: transition),
+        GetPage(
+        name: AppRoutes.Categoryscreen,
+        page: () => const Category(),
         transition: transition),
   ];
 }

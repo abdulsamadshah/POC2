@@ -14,6 +14,8 @@ class _MyWidgetState extends State<Mycart> {
   bool isChecked = true;
   bool isCheckeds = true;
   bool isPassVisible = true;
+  bool _isVisible = true;
+  bool _isVisibles = true;
 
   int number = 0; // Initialize number
 
@@ -63,17 +65,18 @@ class _MyWidgetState extends State<Mycart> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(0),
                         child: GestureDetector(
                           onTap: () {
                             Navigator.pop(context);
                           },
                           child: Container(
+                            padding: const EdgeInsets.all(7),
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: Colors.black,
-                                width: 2,
+                                color: const Color(0xFFdfdfdf),
+                                width: 1,
                               ),
                             ),
                             child: Image.asset(
@@ -178,242 +181,323 @@ class _MyWidgetState extends State<Mycart> {
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
+                          borderRadius: BorderRadius.circular(20.0),
                         ),
                       ),
-                      child: const Text('Apply'),
+                      child: const Text(
+                        'Apply',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF000000),
+                        ),
+                      ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Checkbox(
-                      value: isChecked,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          isChecked = value!; // Toggle checkbox state
-                        });
-                      },
-                    ),
-                    const SizedBox(width: 0),
-                    Image.asset(
-                      'assets/images/burger1.png',
-                      width: 127,
-                      height: 106,
-                      fit: BoxFit.cover,
-                    ),
-                    const SizedBox(width: 10),
-                    Column(
-                      children: [
-                        Container(
-                          // alignment: Alignment.centerLeft,
-                          child: const Text(
-                            'Burger With Meat',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          child: const Text(
-                            '12,230',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            ElevatedButton(
-                              onPressed: decrementNumbers,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors
-                                    .transparent, // Set the button background to transparent
-                                shadowColor:
-                                    Colors.transparent, // Remove shadow
-                                elevation: 0, // Remove elevation
-                                shape: const CircleBorder(
-                                  side: BorderSide(
-                                      color: Color(0xff878787),
-                                      width:
-                                          1), // Circular border color and width
-                                ),
-                              ),
-                              child: const Text(
-                                '-',
-                                style: TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w700,
-                                  color: Color(0xFF000000),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 0),
-                            Text(
-                              '$numbers',
-                              style: const TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            ElevatedButton(
-                              onPressed: incrementNumbers,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors
-                                    .transparent, // Set the button background to transparent
-                                shadowColor:
-                                    Colors.transparent, // Remove shadow
-                                elevation: 0, // Remove elevation
-                                shape: const CircleBorder(
-                                  side: BorderSide(
-                                      color: Color(0xff878787),
-                                      width:
-                                          1), // Circular border color and width
-                                ),
-                              ),
-                              child: const Text(
-                                '+',
-                                style: TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w700,
-                                  color: Color(0xFF000000),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 5),
-                            Image.asset(
-                              'assets/images/delete.png',
-                              width: 20,
-                              height: 20,
-                              fit: BoxFit.cover,
+                _isVisible
+                    ? Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFffffff),
+                          border: Border.all(
+                            color: const Color(0xFFdfdfdf), // Border color
+                            width: 2, // Border width
+                          ), // Background color
+                          borderRadius: BorderRadius.circular(
+                              10), // Optional: round corners
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black26, // Shadow color
+                              blurRadius: 0, // Shadow blur radius
+                              // Shadow offset
                             ),
                           ],
                         ),
-                      ],
-                    ),
-                  ],
-                ),
+                        // padding: EdgeInsets.all(8),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Checkbox(
+                              value: isChecked,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  isChecked = value!; // Toggle checkbox state
+                                });
+                              },
+                              activeColor: const Color(0xFFFE8C00),
+                              checkColor: Colors
+                                  .white, // Color of the checkmark (inside the box)
+                              fillColor: WidgetStateProperty.all(
+                                  const Color(0xFFFE8C00)),
+                            ),
+                            const SizedBox(width: 0),
+                            Image.asset(
+                              'assets/images/burger1.png',
+                              width: 127,
+                              height: 106,
+                              fit: BoxFit.cover,
+                            ),
+                            const SizedBox(width: 20),
+                            Column(
+                              // mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Burger With Meat',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                const Text(
+                                  '\$ 12,230',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFFFE8C00),
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                Row(
+                                  // crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: decrementNumbers,
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors
+                                            .transparent, // Set the button background to transparent
+                                        shadowColor:
+                                            Colors.transparent, // Remove shadow
+                                        elevation: 1, // Remove elevation
+                                        shape: const CircleBorder(
+                                          side: BorderSide(
+                                              color: Color(0xff878787),
+                                              width:
+                                                  1), // Circular border color and width
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        '-',
+                                        style: TextStyle(
+                                          fontFamily: 'Inter',
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w700,
+                                          color: Color(0xFF000000),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 0),
+                                    Text(
+                                      '$numbers',
+                                      style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: incrementNumbers,
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors
+                                            .transparent, // Set the button background to transparent
+                                        shadowColor:
+                                            Colors.transparent, // Remove shadow
+                                        elevation: 0, // Remove elevation
+                                        shape: const CircleBorder(
+                                          side: BorderSide(
+                                              color: Color(0xff878787),
+                                              width:
+                                                  1), // Circular border color and width
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        '+',
+                                        style: TextStyle(
+                                          fontFamily: 'Inter',
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w700,
+                                          color: Color(0xFF000000),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 5),
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          _isVisible =
+                                              false; // Hide the Row when image is clicked
+                                        });
+                                      },
+                                      child: Image.asset(
+                                        'assets/images/delete.png',
+                                        width: 20,
+                                        height: 20,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      )
+                    : const SizedBox(),
                 const SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Checkbox(
-                      value: isCheckeds,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          isCheckeds = value!; // Toggle checkbox state
-                        });
-                      },
-                    ),
-                    const SizedBox(width: 0),
-                    Image.asset(
-                      'assets/images/burger3.png',
-                      width: 127,
-                      height: 106,
-                      fit: BoxFit.cover,
-                    ),
-                    const SizedBox(width: 0),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Ordinary Burgers',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black,
-                          ),
-                        ),
-                        const Text(
-                          '12,230',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black,
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            ElevatedButton(
-                              onPressed: decrementNumber,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors
-                                    .transparent, // Set the button background to transparent
-                                shadowColor:
-                                    Colors.transparent, // Remove shadow
-                                elevation: 0, // Remove elevation
-                                shape: const CircleBorder(
-                                  side: BorderSide(
-                                      color: Color(0xff878787),
-                                      width:
-                                          1), // Circular border color and width
-                                ),
-                              ),
-                              child: const Text(
-                                '-',
-                                style: TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w700,
-                                  color: Color(0xFF000000),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 0),
-                            Text(
-                              '$number',
-                              style: const TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            ElevatedButton(
-                              onPressed: incrementNumber,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors
-                                    .transparent, // Set the button background to transparent
-                                shadowColor:
-                                    Colors.transparent, // Remove shadow
-                                elevation: 0, // Remove elevation
-                                shape: const CircleBorder(
-                                  side: BorderSide(
-                                      color: Color(0xff878787),
-                                      width:
-                                          1), // Circular border color and width
-                                ),
-                              ),
-                              child: const Text(
-                                '+',
-                                style: TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w700,
-                                  color: Color(0xFF000000),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 5),
-                            Image.asset(
-                              'assets/images/delete.png',
-                              width: 20,
-                              height: 20,
-                              fit: BoxFit.cover,
+                _isVisibles
+                    ? Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFffffff),
+                          border: Border.all(
+                            color: const Color(0xFFdfdfdf), // Border color
+                            width: 2, // Border width
+                          ), // Background color
+                          borderRadius: BorderRadius.circular(
+                              10), // Optional: round corners
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black26, // Shadow color
+                              blurRadius: 0, // Shadow blur radius
+                              // Shadow offset
                             ),
                           ],
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                SingleChildScrollView(
+                        // padding: EdgeInsets.all(8),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Checkbox(
+                              value: isCheckeds,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  isCheckeds = value!; // Toggle checkbox state
+                                });
+                              },
+                              activeColor: const Color(0xFFFE8C00),
+                              checkColor: Colors
+                                  .white, // Color of the checkmark (inside the box)
+                              fillColor: WidgetStateProperty.all(
+                                  const Color(0xFFFE8C00)),
+                            ),
+                            // Change the color when checked
+
+                            const SizedBox(width: 0),
+                            Image.asset(
+                              'assets/images/burger3.png',
+                              width: 127,
+                              height: 106,
+                              fit: BoxFit.cover,
+                            ),
+                            const SizedBox(width: 20),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Ordinary Burgers',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                const Text(
+                                  '\$ 12,230',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFFFE8C00),
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                Row(
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: decrementNumber,
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors
+                                            .transparent, // Set the button background to transparent
+                                        shadowColor:
+                                            Colors.transparent, // Remove shadow
+                                        elevation: 0, // Remove elevation
+                                        shape: const CircleBorder(
+                                          side: BorderSide(
+                                              color: Color(0xff878787),
+                                              width:
+                                                  1), // Circular border color and width
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        '-',
+                                        style: TextStyle(
+                                          fontFamily: 'Inter',
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w700,
+                                          color: Color(0xFFdfdfdf),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 0),
+                                    Text(
+                                      '$number',
+                                      style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: incrementNumber,
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors
+                                            .transparent, // Set the button background to transparent
+                                        shadowColor:
+                                            Colors.transparent, // Remove shadow
+                                        elevation: 0, // Remove elevation
+                                        shape: const CircleBorder(
+                                          side: BorderSide(
+                                              color: Color(0xff878787),
+                                              width:
+                                                  1), // Circular border color and width
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        '+',
+                                        style: TextStyle(
+                                          fontFamily: 'Inter',
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w700,
+                                          color: Color(0xFF000000),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 5),
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          _isVisibles =
+                                              false; // Hide the Row when image is clicked
+                                        });
+                                      },
+                                      child: Image.asset(
+                                        'assets/images/delete.png',
+                                        width: 20,
+                                        height: 20,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      )
+                    : const SizedBox(),
+                const SizedBox(height: 50),
+                const SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.all(1.0),
+                    padding: EdgeInsets.all(1.0),
                     child: SizedBox(
                       width: double.infinity,
                       child: Column(
@@ -421,44 +505,99 @@ class _MyWidgetState extends State<Mycart> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // Display the number
-                          const Text(
+                          Text(
                             'Payment Summary',
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 20), // Add some spacing
-                          DataTable(
-                            columns: const [
-                              DataColumn(label: Text('Total Items (3)')),
-                              DataColumn(label: Text('Amount')),
+                          SizedBox(height: 20), // Add some spacing
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Total Items (3)',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xFF878787),
+                                ),
+                              ),
+                              Text(
+                                '\$ 48,900',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(0xFF000000),
+                                ),
+                              ),
                             ],
-                            rows: const [
-                              DataRow(cells: [
-                                DataCell(Text('Delivery Fee')),
-                                DataCell(Align(
-                                  alignment: Alignment
-                                      .centerRight, // Align text to the right
-                                  child: Text('Free'),
-                                )),
-                              ]),
-                              DataRow(cells: [
-                                DataCell(Text('Discount')),
-                                DataCell(Align(
-                                  alignment: Alignment
-                                      .centerRight, // Align text to the right
-                                  child: Text('-10,900'),
-                                )),
-                              ]),
-                              DataRow(cells: [
-                                DataCell(Text('Total')),
-                                DataCell(Align(
-                                  alignment: Alignment
-                                      .centerRight, // Align text to the right
-                                  child: Text('38,000'),
-                                )),
-                              ]),
+                          ),
+                          SizedBox(height: 15),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Delivery Fee',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xFF878787),
+                                ),
+                              ),
+                              Text(
+                                'Free',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(0xFF000000),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 15),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Discount',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xFF878787),
+                                ),
+                              ),
+                              Text(
+                                '-10,900',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(0xFFFE8C00),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 15),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Total',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xFF878787),
+                                ),
+                              ),
+                              Text(
+                                '38,000',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(0xFF000000),
+                                ),
+                              ),
                             ],
                           ),
                         ],
@@ -466,6 +605,7 @@ class _MyWidgetState extends State<Mycart> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 50),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -493,7 +633,7 @@ class _MyWidgetState extends State<Mycart> {
                         Text(
                           'Order Now',
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 16,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
                           ),

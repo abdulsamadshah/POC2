@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 ///
 /// Define static routes name (Screen Name)
 ///
@@ -8,4 +10,5 @@ class AppRoutes {
   static const signupScreen = '/signup_screen';
   // ignore: constant_identifier_names
   static const Homescreen = '/Home_screen';
+  static const Categoryscreen = '/category';
 }

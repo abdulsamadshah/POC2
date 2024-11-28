@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:getxbase/Modules/homescreen/mycart.dart';
+import 'package:getxbase/Modules/homescreen/noorder.dart';
 import 'package:getxbase/Modules/homescreen/profiledetails.dart';
 import 'package:getxbase/login.dart';
 import 'categoryDetails.dart';
@@ -12,9 +14,42 @@ class Category extends StatefulWidget {
   State<Category> createState() => _CategoryState();
 }
 
+final int _currentIndex = 0;
+
 class _CategoryState extends State<Category> {
+  final List<Widget> _pages = [
+    const Category(),
+    const NoOrder(),
+    const Mycart(),
+    const Profiledetails(),
+  ];
+
+  // Method to handle BottomNavigationBar item taps and navigate
+  void _onItemTapped(int index) {
+    // Use Navigator.push to push a new route when a tab is tapped
+    switch (index) {
+      case 0:
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => const Category()));
+        break;
+      case 1:
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => const NoOrder()));
+        break;
+      case 2:
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => const Mycart()));
+        break;
+      case 3:
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const Profiledetails()));
+        break;
+    }
+  }
+
   final CollectionReference categories =
-  FirebaseFirestore.instance.collection("categories");
+      FirebaseFirestore.instance.collection("categories");
+
   String selectedCategoryId = '';
   bool isSearching = false;
   String searchQuery = '';
@@ -65,6 +100,33 @@ class _CategoryState extends State<Category> {
         fontFamily: 'Inter',
       ),
       home: Scaffold(
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _currentIndex, // This controls which tab is active
+          onTap: _onItemTapped, // This calls the _onItemTapped function
+          showSelectedLabels: false, // Hides selected label
+          showUnselectedLabels: false, // Hides unselected labels
+          backgroundColor: Colors.red,
+          selectedItemColor: Colors.orange,
+          unselectedItemColor: const Color(0xffC2C2C2),
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home', // Label is required
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.shop),
+              label: '', // Label is required
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.chat),
+              label: '', // Label is required
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: '', // Label is required
+            ),
+          ],
+        ),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -119,7 +181,6 @@ class _CategoryState extends State<Category> {
                                   fit: BoxFit.cover,
                                 ),
                               ),
-
                               InkWell(
                                 onTap: () {
                                   logout(context);
@@ -127,29 +188,37 @@ class _CategoryState extends State<Category> {
                                 child: Container(
                                   padding: EdgeInsets.all(5),
                                   decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-
-                                    border: Border.all(color: Colors.white,width: 1)
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                          color: Colors.white, width: 1)),
+                                  child: Icon(
+                                    Icons.logout,
+                                    size: 25,
+                                    color: Colors.white,
                                   ),
-                                  child:  Icon(Icons.logout,size: 25,color: Colors.white,),
                                 ),
                               ),
-
                               InkWell(
                                 onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => Profiledetails(),));
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => Profiledetails(),
+                                      ));
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(5),
                                   decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-
-                                      border: Border.all(color: Colors.white,width: 1)
+                                      border: Border.all(
+                                          color: Colors.white, width: 1)),
+                                  child: Icon(
+                                    Icons.account_circle,
+                                    size: 25,
+                                    color: Colors.white,
                                   ),
-                                  child:  Icon(Icons.account_circle,size: 25,color: Colors.white,),
                                 ),
                               )
-                            
                             ],
                           ),
                         ],
@@ -210,7 +279,7 @@ class _CategoryState extends State<Category> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Find by Category',
+                      'Find by Categorys',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -265,8 +334,7 @@ class _CategoryState extends State<Category> {
                               child: Padding(
                                 padding: const EdgeInsets.only(right: 20.0),
                                 child: CategoryItem(
-                                  image:
-                                  'assets/images/taco.png',
+                                  image: 'assets/images/taco.png',
                                   title: categoryName,
                                   backgroundColor: isSelected
                                       ? const Color(0xFFFF8C00)
@@ -302,7 +370,8 @@ class _CategoryState extends State<Category> {
                     }
                     if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
                       final filteredDocs = snapshot.data!.docs.where((doc) {
-                        final title = doc['title']?.toString().toLowerCase() ?? '';
+                        final title =
+                            doc['title']?.toString().toLowerCase() ?? '';
                         return title.contains(searchQuery.toLowerCase());
                       }).toList();
 
@@ -314,11 +383,13 @@ class _CategoryState extends State<Category> {
                         itemCount: filteredDocs.length,
                         itemBuilder: (context, index) {
                           var productDoc = filteredDocs[index];
+                          String imagePath = 'assets/images/burger1.png';
                           var title = productDoc['title'] ?? 'Food Item';
                           var price = productDoc['price'] ?? 'Unknown';
                           var star = productDoc['star'] ?? 'N/A';
                           var distance = productDoc['distance'] ?? 'N/A';
-                          var description = productDoc['desc'] ?? 'No description';
+                          var description =
+                              productDoc['desc'] ?? 'No description';
 
                           return InkWell(
                             onTap: () {
@@ -342,7 +413,7 @@ class _CategoryState extends State<Category> {
                                   padding: const EdgeInsets.all(12.0),
                                   child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         title,
@@ -354,8 +425,8 @@ class _CategoryState extends State<Category> {
                                       const SizedBox(height: 8),
                                       ListTile(
                                         contentPadding:
-                                        const EdgeInsets.symmetric(
-                                            vertical: 8.0),
+                                            const EdgeInsets.symmetric(
+                                                vertical: 8.0),
                                         title: Text(
                                           title,
                                           style: const TextStyle(
@@ -365,8 +436,12 @@ class _CategoryState extends State<Category> {
                                         ),
                                         subtitle: Column(
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                           children: [
+                                            Image.asset(
+                                                'assets/images/burger1.png',
+                                                width: 137,
+                                                height: 106),
                                             Text("Price: \$$price",
                                                 style: const TextStyle(
                                                     fontSize: 14)),
