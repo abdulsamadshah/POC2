@@ -59,10 +59,22 @@ class _CategoryState extends State<Category> {
     super.initState();
 
     //------------- get selectedCategoryId ----------- //
+    // categories.snapshots().first.then((snapshot) {
+    //   if (snapshot.docs.isNotEmpty) {
+    //     setState(() {
+    //       selectedCategoryId = snapshot.docs.first.id;
+    //     });
+    //   }
+    // });
+
     categories.snapshots().first.then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         setState(() {
           selectedCategoryId = snapshot.docs.first.id;
+        });
+      } else {
+        setState(() {
+          selectedCategoryId = ''; // No categories found
         });
       }
     });
@@ -352,126 +364,226 @@ class _CategoryState extends State<Category> {
                 ),
               ),
               const SizedBox(height: 20),
-              SizedBox(
-                height: 300,
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection("fooditems")
-                      .doc(selectedCategoryId)
-                      .collection("products")
-                      .snapshots(),
-                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    if (snapshot.hasError) {
-                      return const Center(
-                          child: Text("Error loading products"));
-                    }
-                    if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
-                      final filteredDocs = snapshot.data!.docs.where((doc) {
-                        final title =
-                            doc['title']?.toString().toLowerCase() ?? '';
-                        return title.contains(searchQuery.toLowerCase());
-                      }).toList();
 
-                      if (filteredDocs.isEmpty) {
-                        return const Center(child: Text("No products found"));
-                      }
+          SizedBox(
+            height: 300,
+            child: selectedCategoryId.isEmpty
+                ? const Center(child: Text("Please select a category"))
+                : StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection("fooditems")
+                  .doc(selectedCategoryId)
+                  .collection("products")
+                  .snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (snapshot.hasError) {
+                  return const Center(child: Text("Error loading products"));
+                }
+                if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
+                  final filteredDocs = snapshot.data!.docs.where((doc) {
+                    final title = doc['title']?.toString().toLowerCase() ?? '';
+                    return title.contains(searchQuery.toLowerCase());
+                  }).toList();
 
-                      return ListView.builder(
-                        itemCount: filteredDocs.length,
-                        itemBuilder: (context, index) {
-                          var productDoc = filteredDocs[index];
-                          String imagePath = 'assets/images/burger1.png';
-                          var title = productDoc['title'] ?? 'Food Item';
-                          var price = productDoc['price'] ?? 'Unknown';
-                          var star = productDoc['star'] ?? 'N/A';
-                          var distance = productDoc['distance'] ?? 'N/A';
-                          var description =
-                              productDoc['desc'] ?? 'No description';
+                  if (filteredDocs.isEmpty) {
+                    return const Center(child: Text("No products found"));
+                  }
 
-                          return InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => CategoryDetails(
-                                    data: productDoc,
-                                  ),
-                                ),
-                              );
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                elevation: 4,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        title,
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      ListTile(
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                                vertical: 8.0),
-                                        title: Text(
-                                          title,
-                                          style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                        subtitle: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Image.asset(
-                                                'assets/images/burger1.png',
-                                                width: 137,
-                                                height: 106),
-                                            Text("Price: \$$price",
-                                                style: const TextStyle(
-                                                    fontSize: 14)),
-                                            Text("Rating: $star",
-                                                style: const TextStyle(
-                                                    fontSize: 14)),
-                                            Text("Distance: $distance",
-                                                style: const TextStyle(
-                                                    fontSize: 14)),
-                                            Text("Description: $description",
-                                                style: const TextStyle(
-                                                    fontSize: 14,
-                                                    color: Colors.grey)),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                  return GridView.builder(
+                    gridDelegate:
+                    const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      childAspectRatio: 3 / 4,
+                    ),
+                    itemCount: filteredDocs.length,
+                    itemBuilder: (context, index) {
+                      var productDoc = filteredDocs[index];
+                      String imagePath = 'assets/images/burger1.png';
+                      var title = productDoc['title'] ?? 'Food Item';
+                      var price = productDoc['price'] ?? 'Unknown';
+                      var star = productDoc['star'] ?? 'N/A';
+                      var distance = productDoc['distance'] ?? 'N/A';
+                      var description =
+                          productDoc['desc'] ?? 'No description';
+
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CategoryDetails(
+                                data: productDoc,
                               ),
                             ),
                           );
                         },
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          elevation: 4,
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Image.asset(
+                                  imagePath,
+                                  width: double.infinity,
+                                  height: 100,
+                                  fit: BoxFit.cover,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  title,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  "Price: \$$price",
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                                Text(
+                                  "Rating: $star",
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                                Text(
+                                  "Distance: $distance",
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       );
-                    } else {
-                      return const Center(child: Text("No products available"));
-                    }
-                  },
-                ),
-              ),
+                    },
+                  );
+                } else {
+                  return const Center(child: Text("No products available"));
+                }
+              },
+            ),
+          ),
+
+          // SizedBox(
+              //   height: 300,
+              //   child: StreamBuilder<QuerySnapshot>(
+              //     stream: FirebaseFirestore.instance
+              //         .collection("fooditems")
+              //         .doc(selectedCategoryId)
+              //         .collection("products")
+              //         .snapshots(),
+              //     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              //       if (snapshot.connectionState == ConnectionState.waiting) {
+              //         return const Center(child: CircularProgressIndicator());
+              //       }
+              //       if (snapshot.hasError) {
+              //         return const Center(
+              //             child: Text("Error loading products"));
+              //       }
+              //       if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
+              //         final filteredDocs = snapshot.data!.docs.where((doc) {
+              //           final title =
+              //               doc['title']?.toString().toLowerCase() ?? '';
+              //           return title.contains(searchQuery.toLowerCase());
+              //         }).toList();
+              //
+              //         if (filteredDocs.isEmpty) {
+              //           return const Center(child: Text("No products found"));
+              //         }
+              //
+              //         return GridView.builder(
+              //           gridDelegate:
+              //               const SliverGridDelegateWithFixedCrossAxisCount(
+              //             crossAxisCount: 2,
+              //             crossAxisSpacing: 10,
+              //             mainAxisSpacing: 10,
+              //             childAspectRatio: 3 / 4,
+              //           ),
+              //           itemCount: filteredDocs.length,
+              //           itemBuilder: (context, index) {
+              //             var productDoc = filteredDocs[index];
+              //             String imagePath = 'assets/images/burger1.png';
+              //             var title = productDoc['title'] ?? 'Food Item';
+              //             var price = productDoc['price'] ?? 'Unknown';
+              //             var star = productDoc['star'] ?? 'N/A';
+              //             var distance = productDoc['distance'] ?? 'N/A';
+              //             var description =
+              //                 productDoc['desc'] ?? 'No description';
+              //
+              //             return InkWell(
+              //               onTap: () {
+              //                 Navigator.push(
+              //                   context,
+              //                   MaterialPageRoute(
+              //                     builder: (context) => CategoryDetails(
+              //                       data: productDoc,
+              //                     ),
+              //                   ),
+              //                 );
+              //               },
+              //               child: Card(
+              //                 shape: RoundedRectangleBorder(
+              //                   borderRadius: BorderRadius.circular(15),
+              //                 ),
+              //                 elevation: 4,
+              //                 child: Padding(
+              //                   padding: const EdgeInsets.all(12.0),
+              //                   child: Column(
+              //                     crossAxisAlignment: CrossAxisAlignment.start,
+              //                     children: [
+              //                       Image.asset(
+              //                         imagePath,
+              //                         width: double.infinity,
+              //                         height: 100,
+              //                         fit: BoxFit.cover,
+              //                       ),
+              //                       const SizedBox(height: 8),
+              //                       Text(
+              //                         title,
+              //                         style: const TextStyle(
+              //                           fontSize: 16,
+              //                           fontWeight: FontWeight.bold,
+              //                         ),
+              //                         maxLines: 1,
+              //                         overflow: TextOverflow.ellipsis,
+              //                       ),
+              //                       const SizedBox(height: 8),
+              //                       Text(
+              //                         "Price: \$$price",
+              //                         style: const TextStyle(fontSize: 14),
+              //                       ),
+              //                       Text(
+              //                         "Rating: $star",
+              //                         style: const TextStyle(fontSize: 14),
+              //                       ),
+              //                       Text(
+              //                         "Distance: $distance",
+              //                         style: const TextStyle(fontSize: 14),
+              //                       ),
+              //                     ],
+              //                   ),
+              //                 ),
+              //               ),
+              //             );
+              //           },
+              //         );
+              //       } else {
+              //         return const Center(child: Text("No products available"));
+              //       }
+              //     },
+              //   ),
+              // )
             ],
           ),
         ),

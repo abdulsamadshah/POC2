@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'category.dart';
@@ -76,6 +77,10 @@ class _CategoryState extends State<Profiledetails> {
       genderController.text = profileData['gender'] ?? "";
       dateofBirthController.text = profileData['dateOfBirth'] ?? "";
       mobNoController.text = profileData['mobNo'] ?? "";
+
+      setState(() {
+
+      });
     }
   }
 
@@ -98,6 +103,7 @@ class _CategoryState extends State<Profiledetails> {
 
 
 
+        Fluttertoast.showToast(msg: "Updated Success");
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => const Category()));
 
@@ -311,15 +317,6 @@ class _CategoryState extends State<Profiledetails> {
                           ),
                           hintText: 'Enter your Email',
                         ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your email';
-                          } else if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
-                              .hasMatch(value)) {
-                            return 'Enter a valid email';
-                          }
-                          return null;
-                        },
                       ),
                       const SizedBox(height: 20),
                       ElevatedButton(
